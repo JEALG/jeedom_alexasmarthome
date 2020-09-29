@@ -166,50 +166,51 @@ class alexasmarthome extends eqLogic
         }*/
 
 
-        foreach ($json[0]['capabilityStates'] as $capabilityState) {
-            $capabilityState_array = json_decode($capabilityState, true);
+        if (isset($json[0])) {
+            foreach ($json[0]['capabilityStates'] as $capabilityState) {
+                $capabilityState_array = json_decode($capabilityState, true);
 
-            //log::add('alexasmarthome', 'info', 'name:::'.$capabilityState_array['name']);
-            //log::add('alexasmarthome', 'info', 'value:::'.$capabilityState_array['value']);
-            //On cherche la commande info qui correspond à $json[0]['name']
+                //log::add('alexasmarthome', 'info', 'name:::'.$capabilityState_array['name']);
+                //log::add('alexasmarthome', 'info', 'value:::'.$capabilityState_array['value']);
+                //On cherche la commande info qui correspond à $json[0]['name']
 
 
-            $valeuraEnregistrer = $capabilityState_array['value'];
+                $valeuraEnregistrer = $capabilityState_array['value'];
 
-            if (isset($capabilityState_array['name'])) {
+                if (isset($capabilityState_array['name'])) {
 
-                if ($capabilityState_array['name'] == "color")
-                    $valeuraEnregistrer = "#" . self::fGetRGB($capabilityState_array['value']['hue'], $capabilityState_array['value']['saturation'], $capabilityState_array['value']['brightness']);
+                    if ($capabilityState_array['name'] == "color")
+                        $valeuraEnregistrer = "#" . self::fGetRGB($capabilityState_array['value']['hue'], $capabilityState_array['value']['saturation'], $capabilityState_array['value']['brightness']);
 
-                if ($capabilityState_array['name'] == "colorProperties") {
-                    $valeuraEnregistrer = $capabilityState_array['value']['localizationMap']['fr'];
-                    if ($valeuraEnregistrer == '')
-                        $valeuraEnregistrer = $capabilityState_array['value']['name'];
-                }
+                    if ($capabilityState_array['name'] == "colorProperties") {
+                        $valeuraEnregistrer = $capabilityState_array['value']['localizationMap']['fr'];
+                        if ($valeuraEnregistrer == '')
+                            $valeuraEnregistrer = $capabilityState_array['value']['name'];
+                    }
 
-                if (($capabilityState_array['name'] == "temperature") || ($capabilityState_array['name'] == "targetSetpoint")) {
-                    $valeuraEnregistrer = $capabilityState_array['value']['value'];
-                }
+                    if (($capabilityState_array['name'] == "temperature") || ($capabilityState_array['name'] == "targetSetpoint")) {
+                        $valeuraEnregistrer = $capabilityState_array['value']['value'];
+                    }
 
-                if ($capabilityState_array['name'] == "connectivity") {
-                    //https://developer.amazon.com/fr-FR/docs/alexa/device-apis/alexa-endpointhealth.html
-                    //The connectivity status of the device; one of OK or UNREACHABLE.
-                    //log::add('alexasmarthome', 'info', '**************connectivity ********');
-                    //log::add('alexasmarthome', 'info', 'value:::'.json_encode($capabilityState_array['value']));
-                    //log::add('alexasmarthome', 'info', 'fr:::'.json_encode($capabilityState_array['value']['value']));
-                    if ($capabilityState_array['value']['value'] == "OK") $valeuraEnregistrer = 1; else $valeuraEnregistrer = 0;
-                }
+                    if ($capabilityState_array['name'] == "connectivity") {
+                        //https://developer.amazon.com/fr-FR/docs/alexa/device-apis/alexa-endpointhealth.html
+                        //The connectivity status of the device; one of OK or UNREACHABLE.
+                        //log::add('alexasmarthome', 'info', '**************connectivity ********');
+                        //log::add('alexasmarthome', 'info', 'value:::'.json_encode($capabilityState_array['value']));
+                        //log::add('alexasmarthome', 'info', 'fr:::'.json_encode($capabilityState_array['value']['value']));
+                        if ($capabilityState_array['value']['value'] == "OK") $valeuraEnregistrer = 1; else $valeuraEnregistrer = 0;
+                    }
 
-                $cmd = $this->getCmd(null, $capabilityState_array['name']);
-                if (is_object($cmd)) {
-                    $this->checkAndUpdateCmd($capabilityState_array['name'], $valeuraEnregistrer);
-                    log::add('alexasmarthome', 'debug', '╠═══> ' . $capabilityState_array['name'] . ' a été mis à jour (' . $valeuraEnregistrer . ') sur ' . $this->getName());
-                } else {
-                    log::add('alexasmarthome', 'debug', '╠═══> ' . $capabilityState_array['name'] . ' a été mis à jour (' . $valeuraEnregistrer . '), mais absent de ' . $this->getName() . ', donc ignoré');
+                    $cmd = $this->getCmd(null, $capabilityState_array['name']);
+                    if (is_object($cmd)) {
+                        $this->checkAndUpdateCmd($capabilityState_array['name'], $valeuraEnregistrer);
+                        log::add('alexasmarthome', 'debug', '╠═══> ' . $capabilityState_array['name'] . ' a été mis à jour (' . $valeuraEnregistrer . ') sur ' . $this->getName());
+                    } else {
+                        log::add('alexasmarthome', 'debug', '╠═══> ' . $capabilityState_array['name'] . ' a été mis à jour (' . $valeuraEnregistrer . '), mais absent de ' . $this->getName() . ', donc ignoré');
+                    }
                 }
             }
         }
-
         log::add('alexasmarthome', 'info', ' ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════');
 
 
