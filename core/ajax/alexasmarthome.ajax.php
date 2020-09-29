@@ -44,7 +44,7 @@ try {
             }
             log::add('alexasmarthome', 'info', 'Fin lancement Serveur pour Cookie');
             ajax::success();
-        break;
+            break;
         case 'closeCookie':
             $sensor_path = realpath(dirname(__FILE__) . '/../../resources');
             //Par sécurité, on Kill un éventuel précédent proessus cookie.js
@@ -53,75 +53,75 @@ try {
             $result = exec('nohup ' . $cmd . ' >> ' . log::getPathToLog('alexasmarthome_cookie') . ' 2>&1 &');
             log::add('alexasmarthome', 'info', 'Fin lancement Serveur pour Cookie');
             ajax::success();
-        break;
+            break;
         case 'scanAmazonAlexa':
             alexasmarthome::scanAmazonAlexa();
             ajax::success();
-        break;
+            break;
         case 'forcerDefaultAllCmd':
             alexasmarthome::forcerDefaultAllCmd();
             ajax::success();
-        break;        
-		case 'forcerDefaultCmd':
-				$eqLogic = alexasmarthome::byId(init('id'));
-				if (!is_object($eqLogic)) {
-					throw new Exception(__('alexasmarthome eqLogic non trouvé : ', __FILE__) . init('id'));
-				}
+            break;
+        case 'forcerDefaultCmd':
+            $eqLogic = alexasmarthome::byId(init('id'));
+            if (!is_object($eqLogic)) {
+                throw new Exception(__('alexasmarthome eqLogic non trouvé : ', __FILE__) . init('id'));
+            }
             alexasmarthome::forcerDefaultCmd(init('id'));
             ajax::success();
-        break;		
-		case 'VerifiePresenceCookie':
-        $request = realpath(dirname(__FILE__) . '/../../resources/data/alexa-cookie.json');
-        if (file_exists($request))
-		ajax::success();
-		else
- 		ajax::error();
-       break;
+            break;
+        case 'VerifiePresenceCookie':
+            $request = realpath(dirname(__FILE__) . '/../../resources/data/alexa-cookie.json');
+            if (file_exists($request))
+                ajax::success();
+            else
+                ajax::error();
+            break;
         case 'deamonCookieStart':
-					//on va vérifier que les dépendances sont bien installées
-					$request = realpath(dirname(__FILE__) . '/../../resources/node_modules');
-					if (!(file_exists($request)))
-					ajax::error("Dépendances non présentes, génération manuelle du cookie Amazon impossible !!");
+            //on va vérifier que les dépendances sont bien installées
+            $request = realpath(dirname(__FILE__) . '/../../resources/node_modules');
+            if (!(file_exists($request)))
+                ajax::error("Dépendances non présentes, génération manuelle du cookie Amazon impossible !!");
 
             log::add('alexasmarthome', 'info', 'Lancement Serveur pour Cookie - DEBUT deamonCookieStart');
             alexasmarthome::deamonCookie_start();
             log::add('alexasmarthome', 'info', 'Lancement Serveur pour Cookie - DEBUT deamon_info');
 
-        $i = 0;
-        while ($i < 10) {
-            log::add('alexasmarthome', 'info', 'Test si serveur cookie lance');
+            $i = 0;
+            while ($i < 10) {
+                log::add('alexasmarthome', 'info', 'Test si serveur cookie lance');
 
-        $pid = trim(shell_exec('ps ax | grep "alexasmarthome/resources/initCookie.js" | grep -v "grep" | wc -l'));
-        if ($pid != '' && $pid != '0') {
-            break;
+                $pid = trim(shell_exec('ps ax | grep "alexasmarthome/resources/initCookie.js" | grep -v "grep" | wc -l'));
+                if ($pid != '' && $pid != '0') {
+                    break;
+                }
+                sleep(1);
+                $i++;
             }
-            sleep(1);
-            $i++;
-        }
-        if ($i >= 10) {
-            log::add('alexasmarthome', 'info', 'SOUCI LANCEMENT SERVEUR COOKIE');
-        }
+            if ($i >= 10) {
+                log::add('alexasmarthome', 'info', 'SOUCI LANCEMENT SERVEUR COOKIE');
+            }
 
             alexasmarthome::deamon_info();
             log::add('alexasmarthome', 'info', 'Lancement Serveur pour Cookie - FIN   deamonCookieStart');
             ajax::success();
-        break;
+            break;
         case 'deamonCookieStop':
             alexasmarthome::deamonCookie_stop();
             alexasmarthome::deamon_info();
             ajax::success();
-        break;
-	case 'reinstallNodeJS':
-		$ret=alexasmarthome::reinstallNodeJS();
-		ajax::success($ret);
-	break;
-	case 'supprimeTouslesDevices':
-		$ret=alexasmarthome::supprimeTouslesDevices();
-		ajax::success($ret);
-	break;    }
+            break;
+        case 'reinstallNodeJS':
+            $ret = alexasmarthome::reinstallNodeJS();
+            ajax::success($ret);
+            break;
+        case 'supprimeTouslesDevices':
+            $ret = alexasmarthome::supprimeTouslesDevices();
+            ajax::success($ret);
+            break;
+    }
     throw new \Exception('Aucune methode correspondante');
-}
-catch(\Exception $e) {
+} catch (\Exception $e) {
     ajax::error(displayException($e), $e->getCode());
     log::add('alexasmarthome', 'error', $e);
 }

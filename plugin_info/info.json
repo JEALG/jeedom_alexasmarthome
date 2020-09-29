@@ -1,19 +1,30 @@
 {
-	"id" : "alexasmarthome",
-	"name" : "Alexa - SmartHome",
-	"description" : "Interface smartHome pour Alexa-API",
-	"licence" : "AGPL",
-	"author" : "Sigalou",
-	"require" : "3.3.24",
-	"version": "0.0.1",
-	"changelog" : "http://jeedom.sigalou-domotique.fr/alexa-amazon-smarthome-changelog",
-	"forum_link" : "https://community.jeedom.com/tags/plugin-alexasmarthome",
-	"documentation" : "http://jeedom.sigalou-domotique.fr/alexa-amazon-smarthome-documentation",
-	"category" : "devicecommunication",
-  "hasDependency" : 0,
-  "hasOwnDeamon" : 0,
-	"language" : ["fr_FR","en_US"],
-	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile","V4"],
-	"maxDependancyInstallTime" : 0
+  "id": "alexasmarthome",
+  "name": "Alexa - SmartHome",
+  "description": "Interface smartHome pour Alexa-API",
+  "licence": "AGPL",
+  "author": "Sigalou",
+  "require": "3.3.24",
+  "version": "0.0.1",
+  "changelog": "http://jeedom.sigalou-domotique.fr/alexa-amazon-smarthome-changelog",
+  "forum_link": "https://community.jeedom.com/tags/plugin-alexasmarthome",
+  "documentation": "http://jeedom.sigalou-domotique.fr/alexa-amazon-smarthome-documentation",
+  "category": "devicecommunication",
+  "hasDependency": 0,
+  "hasOwnDeamon": 0,
+  "language": [
+    "fr_FR",
+    "en_US"
+  ],
+  "compatibility": [
+    "miniplus",
+    "smart",
+    "rpi",
+    "docker",
+    "diy",
+    "mobile",
+    "V4"
+  ],
+  "maxDependancyInstallTime": 0
 }
 
