@@ -441,8 +441,7 @@ class alexasmarthome extends eqLogic
 
 			// !!!!!!!!!!!!!! ON AJOUTE LES COMMANDES INFO DANS REFRESH MAINTENANT 	
             self::updateCmd($F, 'test5', 'action', 'other', false, 'Test5', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetMode&mode=Position.Up', "refresh", null, 10, $cas9);   
-            self::updateCmd($F, 'test6', 'action', 'other', false, 'Test6', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetMode&mode=Position.Down', "refresh", null, 10, $cas9);               self::updateCmd($F, 'test3', 'action'
-			
+            self::updateCmd($F, 'test6', 'action', 'other', false, 'Test6', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetMode&mode=Position.Down', "refresh", null, 10, $cas9);               
 			
 			
             self::updateCmd($F, 'brightness-set', 'action', 'slider', false, 'Définir Luminosité', true, true, null, null, null, 'SmarthomeCommand?command=setBrightness&brightness=#slider#', "brightness", null, 4, $cas7);
