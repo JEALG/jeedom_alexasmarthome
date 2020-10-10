@@ -440,10 +440,8 @@ class alexasmarthome extends eqLogic
             self::updateCmd($F, 'detectionState', 'info', 'string', false, "Etat Détection", true, true, null, null, null, null, null, null, 1, $cas3);// "DETECTED","NOT_DETECTED"
 
 			// !!!!!!!!!!!!!! ON AJOUTE LES COMMANDES INFO DANS REFRESH MAINTENANT 	
-            self::updateCmd($F, 'test1', 'action', 'other', false, 'Test1', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetRangeValue&rangeValue=0', "refresh", null, 10, $cas9);   
-            self::updateCmd($F, 'test2', 'action', 'other', false, 'Test2', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetRangeValue&rangeValue=100', "refresh", null, 10, $cas9);   
-            self::updateCmd($F, 'test3', 'action', 'other', false, 'Test3', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=AdjustRangeValue&rangeValueDelta=10&rangeValueDeltaDefault=0', "refresh", null, 10, $cas9);   
-            self::updateCmd($F, 'test4', 'action', 'other', false, 'Test4', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=AdjustRangeValue&rangeValueDelta=10&rangeValueDeltaDefault=1', "refresh", null, 10, $cas9);   
+            self::updateCmd($F, 'test5', 'action', 'other', false, 'Test5', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetMode&mode=Position.Up', "refresh", null, 10, $cas9);   
+            self::updateCmd($F, 'test6', 'action', 'other', false, 'Test6', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetMode&mode=Position.Down', "refresh", null, 10, $cas9);               self::updateCmd($F, 'test3', 'action'
 			
 			
 			
