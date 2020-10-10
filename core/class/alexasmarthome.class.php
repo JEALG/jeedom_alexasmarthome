@@ -226,22 +226,19 @@ class alexasmarthome extends eqLogic
 								log::add('alexasmarthome', 'info', ' ╠═══> ' . $capabilityState_array['name'] . ' a été ajouté et sera mis à jour la prochaine fois');
 								$aEteAjoute=true;							
 								break;	
-							case 'turnOn':
-							    self::updateCmd($F, 'turnOn', 'action', 'other', false, 'Allume', false, true, 'fas fa-circle" style="color:white', null, null, 'SmarthomeCommand?command=turnOn', "powerState", null, 17, true);
+							case 'mode':
+								self::updateCmd($F, 'mode', 'info', 'string', false, "Position", true, true, null, null, null, null, null, null, 3, true);
+
 								log::add('alexasmarthome', 'info', ' ╠═══> ' . $capabilityState_array['name'] . ' a été ajouté et sera mis à jour la prochaine fois');
 								$aEteAjoute=true;								
 								break;						
-							case 'turnOff':
-								self::updateCmd($F, 'turnOff', 'action', 'other', false, 'Eteint', true, true, 'far fa-circle" style="color:black', null, null, 'SmarthomeCommand?command=turnOff', "powerState", null, 18, true);
-								log::add('alexasmarthome', 'info', ' ╠═══> ' . $capabilityState_array['name'] . ' a été ajouté et sera mis à jour la prochaine fois');
-								$aEteAjoute=true;							
-								break;								
+						
 
 							}
 							if (!($aEteAjoute)) {
 							log::add('alexasmarthome', 'debug', "║!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 							log::add('alexasmarthome', 'debug', '╠═══> ' . $capabilityState_array['name'] . " n'a pas été ajouté automatiquement, il faut demander à Sigalou de ");
-							log::add('alexasmarthome', 'debug', "║ prévoir cette commande en lui précisant si le résultat attendu est binary/numeric/other ");							
+							log::add('alexasmarthome', 'debug', "║ prévoir cette commande en lui précisant si le résultat attendu est binary/numeric/string ");							
 							log::add('alexasmarthome', 'debug', "║!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 							}
 					}
@@ -455,6 +452,8 @@ class alexasmarthome extends eqLogic
             self::updateCmd($F, 'targetSetpoint', 'info', 'numeric', false, "Consigne du thermostat", true, true, null, null, null, null, null, null, 16, $cas4);
 //https://www.openhab.org/docs/ecosystem/alexa/
 //https://github.com/alexa/alexa-smarthome
+            self::updateCmd($F, 'turnOn', 'action', 'other', false, 'Allume', false, true, 'fas fa-circle" style="color:white', null, null, 'SmarthomeCommand?command=turnOn', "powerState", null, 17, $cas8);
+            self::updateCmd($F, 'turnOff', 'action', 'other', false, 'Eteint', true, true, 'far fa-circle" style="color:black', null, null, 'SmarthomeCommand?command=turnOff', "powerState", null, 18, $cas8);
 
             self::updateCmd($F, 'rgb-set', 'action', 'select', false, 'Définir Couleur', false, true, null, null, null, 'SmarthomeCommand?command=setColor&color=#select#', "refresh", 'red|Rouge;crimson|Cramoisie;salmon|Saumon;orange|Orange;gold|Or;yellow|Jaune;green|Vert;turquoise|Turquoise;cyan|Cyan;sky_blue|Bleu ciel;blue|Bleu;purple|Violet;magenta|Magenta;pink|Rose;lavender|Lavande', 16, $cas6);
             self::updateCmd($F, 'temperature-set', 'action', 'select', false, 'Définir Température du blanc', false, true, null, null, null, 'SmarthomeCommand?command=setColorTemperature&color=#select#', "refresh", 'warm_white|Blanc chaud;soft_white|Blanc doux;white|Blanc;daylight_white|Blanc lumière du jour;cool_white|Blanc froid', 16, $cas5);
