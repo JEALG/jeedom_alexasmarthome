@@ -426,6 +426,8 @@ class alexasmarthome extends eqLogic
 
             $widgetSmarthome = ($this->getConfiguration('devicetype') == "Smarthome");
             //log::add('alexasmarthome', 'debug', '**********************updateCmd '.$this->getName().'***********************************');
+            
+			$cas9 = (($this->hasCapaorFamilyorType("EXTERIOR_BLIND")) && $widgetSmarthome);
 
             $cas8 = (($this->hasCapaorFamilyorType("turnOff")) && $widgetSmarthome);
             $cas7 = (($this->hasCapaorFamilyorType("setBrightness")) && $widgetSmarthome);
@@ -437,11 +439,18 @@ class alexasmarthome extends eqLogic
             // CONTACT_SENSOR
             self::updateCmd($F, 'detectionState', 'info', 'string', false, "Etat Détection", true, true, null, null, null, null, null, null, 1, $cas3);// "DETECTED","NOT_DETECTED"
 
-			// !!!!!!!!!!!!!! ON AJOUTE LES COMMANDES DANS REFRESH MAINTENANT 	
-
+			// !!!!!!!!!!!!!! ON AJOUTE LES COMMANDES INFO DANS REFRESH MAINTENANT 	
+            self::updateCmd($F, 'test1', 'action', 'other', false, 'Test1', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetRangeValue&rangeValue=0', "refresh", null, 10, $cas9);   
+            self::updateCmd($F, 'test2', 'action', 'other', false, 'Test2', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetRangeValue&rangeValue=100', "refresh", null, 10, $cas9);   
+            self::updateCmd($F, 'test3', 'action', 'other', false, 'Test3', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=AdjustRangeValue&rangeValueDelta=10&rangeValueDeltaDefault=0', "refresh", null, 10, $cas9);   
+            self::updateCmd($F, 'test4', 'action', 'other', false, 'Test4', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=AdjustRangeValue&rangeValueDelta=10&rangeValueDeltaDefault=1', "refresh", null, 10, $cas9);   
+			
+			
+			
             self::updateCmd($F, 'brightness-set', 'action', 'slider', false, 'Définir Luminosité', true, true, null, null, null, 'SmarthomeCommand?command=setBrightness&brightness=#slider#', "brightness", null, 4, $cas7);
             self::updateCmd($F, 'turnOn_jaune', 'action', 'other', false, 'Allume en Jaune', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=setColor&color=yellow', "refresh", null, 10, $cas6);
-            self::updateCmd($F, 'turnOn_bleu', 'action', 'other', false, 'Allume en Bleu', true, true, 'fas fa-circle" style="color:blue', null, null, 'SmarthomeCommand?command=setColor&color=blue', "refresh", null, 11, $cas6);
+         
+			self::updateCmd($F, 'turnOn_bleu', 'action', 'other', false, 'Allume en Bleu', true, true, 'fas fa-circle" style="color:blue', null, null, 'SmarthomeCommand?command=setColor&color=blue', "refresh", null, 11, $cas6);
             self::updateCmd($F, 'turnOn_rose', 'action', 'other', false, 'Allume en Rose', true, true, 'fas fa-circle" style="color:pink', null, null, 'SmarthomeCommand?command=setColor&color=pink', "refresh", null, 12, $cas6);
             self::updateCmd($F, 'turnOn_violet', 'action', 'other', false, 'Allume en Violet', true, true, 'fas fa-circle" style="color:purple', null, null, 'SmarthomeCommand?command=setColor&color=purple', "refresh", null, 13, $cas6);
             self::updateCmd($F, 'turnOn_rouge', 'action', 'other', false, 'Allume en Rouge', true, true, 'fas fa-circle" style="color:red', null, null, 'SmarthomeCommand?command=setColor&color=red', "refresh", null, 14, $cas6);
