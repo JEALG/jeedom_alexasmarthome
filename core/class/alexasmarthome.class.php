@@ -147,7 +147,7 @@ class alexasmarthome extends eqLogic
 
         $device = $this->getConfiguration('applianceId');
         if ($family == "GROUP") $device = $this->getLogicalId();
-        if ($family == "GROUP") log::add('alexasmarthome', 'info', 'logicalidGROUP : ' . $this->getLogicalId());
+        //if ($family == "GROUP") log::add('alexasmarthome', 'info', 'logicalidGROUP : ' . $this->getLogicalId());
         log::add('alexasmarthome', 'info', ' ');
         log::add('alexasmarthome', 'info', ' ╔══════════════════════[Refresh du device ' . $this->getName() . ' (' . $family . ')]═════════════════════════════════════════════════════════');
         //log::add('alexasmarthome', 'info', 'Refresh du device : '.$this->getName().' ('.$family.')');
