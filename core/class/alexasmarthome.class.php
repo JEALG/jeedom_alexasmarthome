@@ -3,7 +3,8 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 class alexasmarthome extends eqLogic
 {
-
+	/*     * *************************Attributs pour autoriser les onglets Affichage et Disposition****************************** */
+	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => true);
 
     public static function cron($_eqlogic_id = null)
     {

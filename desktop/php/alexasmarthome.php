@@ -113,7 +113,7 @@ foreach ($eqLogics as $eqLogic) {
                         $datetimeaujourdhui = new DateTime(date('Y-m-d'));
                         $interval = $datetimecreation->diff($datetimeaujourdhui);
 
-                        if (($eqLogic->getConfiguration('family') != "GROUP") && ($eqLogic->getConfiguration('family') != "SCENE")) {
+                        if (($eqLogic->getConfiguration('family') != "GROUP") && ($eqLogic->getConfiguration('family') != "SCENE") && ($eqLogic->getIsEnable())) {
 
                             $opacity = ($eqLogic->getIsEnable()) ? '' : ' disableCard';
                             echo '<div class="eqLogicDisplayCard cursor third ' . $opacity . '" data-eqLogic_id="' . $eqLogic->getId() . '">';
@@ -171,7 +171,7 @@ foreach ($eqLogics as $eqLogic) {
                         $interval = $datetimecreation->diff($datetimeaujourdhui);
 
 
-                        if ($eqLogic->getConfiguration('family') == "GROUP") {
+                        if (($eqLogic->getConfiguration('family') == "GROUP") && ($eqLogic->getIsEnable())) {
 
                             $opacity = ($eqLogic->getIsEnable()) ? '' : ' disableCard';
                             echo '<div class="eqLogicDisplayCard cursor third ' . $opacity . '" data-eqLogic_id="' . $eqLogic->getId() . '">';
@@ -228,7 +228,7 @@ foreach ($eqLogics as $eqLogic) {
                         $datetimeaujourdhui = new DateTime(date('Y-m-d'));
                         $interval = $datetimecreation->diff($datetimeaujourdhui);
 
-                        if ($eqLogic->getConfiguration('family') == "SCENE") {
+                        if (($eqLogic->getConfiguration('family') == "SCENE") && ($eqLogic->getIsEnable())) {
 
                             $opacity = ($eqLogic->getIsEnable()) ? '' : ' disableCard';
                             echo '<div class="eqLogicDisplayCard cursor third ' . $opacity . '" data-eqLogic_id="' . $eqLogic->getId() . '">';
@@ -265,6 +265,54 @@ foreach ($eqLogics as $eqLogic) {
                 </div>
             </div>
         </div>
+
+        <legend><i class="fas fa-table"></i> {{Equipements désactivés}}</legend>
+        <!-- Container de la liste -->
+        <div class="panel">
+            <div class="panel-body">
+                <div class="eqLogicThumbnailContainer third">
+                    <?php
+                    foreach ($eqLogics as $eqLogic) {
+
+
+                        $datetimecreation = new DateTime($eqLogic->getConfiguration('createtime'));
+                        $datetimeaujourdhui = new DateTime(date('Y-m-d'));
+                        $interval = $datetimecreation->diff($datetimeaujourdhui);
+
+                        if (!($eqLogic->getIsEnable())) {
+
+                            $opacity = ($eqLogic->getIsEnable()) ? '' : ' disableCard';
+                            echo '<div class="eqLogicDisplayCard cursor third ' . $opacity . '" data-eqLogic_id="' . $eqLogic->getId() . '">';
+
+                            $badge="Equip";
+							if ($eqLogic->getConfiguration('family') == "GROUP") $badge="Groupe";
+							if ($eqLogic->getConfiguration('family') == "SCENE") $badge="Scène";
+							echo '<span class="badge badge-success">'.$badge.'</span>';
+
+                            //$alternateImg = $eqLogic->getConfiguration('type');
+                            $logoImg = $eqLogic->getConfiguration('icon');
+                            $alternateImg = $eqLogic->getConfiguration('type');
+                            if (file_exists(dirname(__FILE__) . '/../../../alexaapi/core/config/devices/' . $logoImg . '.png'))
+                                echo '<img class="lazy" src="plugins/alexaapi/core/config/devices/' . $logoImg . '.png" style="min-height:75px !important;" />';
+                            elseif (file_exists(dirname(__FILE__) . '/../../../alexaapi/core/config/devices/' . $alternateImg . '.png'))
+                                echo '<img class="lazy" src="plugins/alexaapi/core/config/devices/' . $alternateImg . '.png" style="min-height:75px !important;" />';
+                            elseif (file_exists(dirname(__FILE__) . '/../../../alexaapi/core/config/devices/' . $eqLogic->getConfiguration('family') . '.png'))
+                                echo '<img class="lazy" src="plugins/alexaapi/core/config/devices/' . $eqLogic->getConfiguration('family') . '.png" style="min-height:75px !important;" />';
+                            //elseif(file_exists(dirname(__FILE__).'/../../../alexaapi/core/config/devices/default.png'))
+                            //	echo '<img class="lazy" src="plugins/alexaapi/core/config/devices/default.png" style="min-height:75px !important;" />';
+                            else
+                                echo '<img class="lazy" src="' . $plugin->getPathImgIcon() . '" style="min-height:75px !important;" />';
+
+                            echo '<br />';
+                            echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
+                            echo '</div>';
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+
 
     </div>
     <!-- Container du panneau de contrôle -->
