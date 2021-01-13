@@ -10,7 +10,7 @@ class alexasmarthome extends eqLogic
     {
         $eqLogics = ($_eqlogic_id !== null) ? array(eqLogic::byId($_eqlogic_id)) : eqLogic::byType('alexasmarthome', true);
         foreach ($eqLogics as $alexasmarthome) {
-            $autorefresh = $alexasmarthome->getConfiguration('autorefresh');
+            $autorefresh = checkAndFixCron($alexasmarthome->getConfiguration('autorefresh'));
             if ($autorefresh == '') $autorefresh = '* * * * *';
             $alexasmarthome->setConfiguration('dernierLancement', "CRON " . date("d.m.Y") . " " . date("H:i:s"));
             if ($alexasmarthome->getIsEnable() == 1) {
