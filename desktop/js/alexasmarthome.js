@@ -266,6 +266,7 @@ function addCmdToTable(_cmd) {
         return;
     }
   
+  
     if (init(_cmd.type) == 'info') {
         var tr =
             '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">'
@@ -309,14 +310,14 @@ function addCmdToTable(_cmd) {
         tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i>'
             + '</td>'
             + '</tr>';
-
-        $('#table_cmd tbody').append(tr);
-        $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
-		if (isset(_cmd.type)) {
-			$('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
-		}    
-	jeedom.cmd.changeType($('#table_cmd tbody tr').last(), init(_cmd.subType));
+			
+    $('#table_cmd tbody').append(tr);
+    $('#table_cmd tbody tr').last().setValues(_cmd, '.cmdAttr');
+    if (isset(_cmd.type)) {
+      $('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
     }
+    jeedom.cmd.changeType($('#table_cmd tbody tr').last(), init(_cmd.subType));
+  }
 
 
     if (init(_cmd.type) == 'action') {

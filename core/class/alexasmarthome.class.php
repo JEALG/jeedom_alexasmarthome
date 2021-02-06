@@ -202,6 +202,10 @@ class alexasmarthome extends eqLogic
                         if ($capabilityState_array['value']['value'] == "OK") $valeuraEnregistrer = 1; else $valeuraEnregistrer = 0;
                     }
                     
+
+
+
+
                     $cmd = $this->getCmd(null, $capabilityState_array['name']);
                     if (is_object($cmd)) {
                         $this->checkAndUpdateCmd($capabilityState_array['name'], $valeuraEnregistrer);
@@ -365,6 +369,9 @@ class alexasmarthome extends eqLogic
 
     public function updateCmd($forceUpdate, $LogicalId, $Type, $SubType, $RunWhenRefresh, $Name, $IsVisible, $title_disable, $setDisplayicon, $infoNameArray, $setTemplate_lien, $request, $infoName, $listValue, $Order, $Test)
     {
+		
+		//		log::add('alexasmarthome', 'info', ' updateCmd ╠═══> [' . $LogicalId . ']');
+		
         if ($Test) {
             try {
                 if (empty($Name)) $Name = $LogicalId;
@@ -421,7 +428,9 @@ class alexasmarthome extends eqLogic
 
     public function postSave()
     {
-        log::add('alexasmarthome_scan', 'debug', '**********************postSave '.$this->getName().'***********************************');
+		//log::add('alexasmarthome', 'info', ' Début POSTSAVE ╠═══> [' . $this->getName() . ']');
+
+       // log::add('alexasmarthome_scan', 'debug', '**********************postSave '.$this->getName().'***********************************');
         $F = $this->getStatus('forceUpdate');// forceUpdate permet de recharger les commandes à valeur d'origine, mais sans supprimer/recréer les commandes
         $capa = $this->getConfiguration('capabilities', '');
         $capaT = $this->getConfiguration('triggers', '');
@@ -450,8 +459,8 @@ class alexasmarthome extends eqLogic
             self::updateCmd($F, 'detectionState', 'info', 'string', false, "Etat Détection", true, true, null, null, null, null, null, null, 1, $cas3);// "DETECTED","NOT_DETECTED"
 
 			// !!!!!!!!!!!!!! ON AJOUTE LES COMMANDES INFO DANS REFRESH MAINTENANT 	
-            self::updateCmd($F, 'test5', 'action', 'other', false, 'Test5', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetMode&mode=Position.Up', "refresh", null, 10, $cas9);   
-            self::updateCmd($F, 'test6', 'action', 'other', false, 'Test6', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetMode&mode=Position.Down', "refresh", null, 10, $cas9);               
+            //self::updateCmd($F, 'test5', 'action', 'other', false, 'Test5', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetMode&mode=Position.Up', "refresh", null, 10, $cas9);   
+            //self::updateCmd($F, 'test6', 'action', 'other', false, 'Test6', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetMode&mode=Position.Down', "refresh", null, 10, $cas9);               
 			
 			
             self::updateCmd($F, 'brightness-set', 'action', 'slider', false, 'Définir Luminosité', true, true, null, null, null, 'SmarthomeCommand?command=setBrightness&brightness=#slider#', "brightness", null, 4, $cas7);
@@ -464,7 +473,7 @@ class alexasmarthome extends eqLogic
             self::updateCmd($F, 'turnOn_vert', 'action', 'other', false, 'Allume en Vert', true, true, 'fas fa-circle" style="color:green', null, null, 'SmarthomeCommand?command=setColor&color=green', "refresh", null, 15, $cas6);
             self::updateCmd($F, 'colorProperties', 'info', 'string', false, "Couleur", true, true, null, null, null, null, null, null, 16, $cas6);
             self::updateCmd($F, 'thermostatMode', 'info', 'string', false, "Mode du thermostat", true, true, null, null, null, null, null, null, 16, $cas4);
-            self::updateCmd($F, 'temperature', 'info', 'numeric', false, "Température", true, true, null, null, null, null, null, null, 16, $cas4);
+            //self::updateCmd($F, 'temperature', 'info', 'numeric', false, "Température", true, true, null, null, null, null, null, null, 16, $cas4);
             self::updateCmd($F, 'targetSetpoint', 'info', 'numeric', false, "Consigne du thermostat", true, true, null, null, null, null, null, null, 16, $cas4);
 //https://www.openhab.org/docs/ecosystem/alexa/
 //https://github.com/alexa/alexa-smarthome
@@ -532,21 +541,19 @@ class alexasmarthome extends eqLogic
         $this->setStatus('forceUpdate', false); //dans tous les cas, on repasse forceUpdate à false
 
         //self::scanAmazonSmartHome();
+		//log::add('alexasmarthome', 'info', ' FIN POSTSAVE ╠═══> [' . $this->getName() . ']');
 
     }
 
 
     public function preRemove()
     {
-        if ($this->getConfiguration('devicetype') == "Player") { // Si c'est un type Player, il faut supprimer le Device Playlist
-            $device_playlist = str_replace("_player", "", $this->getConfiguration('serial')) . "_playlist"; //Nom du device de la playlist
-            $eq = eqLogic::byLogicalId($device_playlist, 'alexasmarthome');
-            if (is_object($eq)) $eq->remove();
-        }
+
     }
 
     public function preSave()
     {
+//										log::add('alexasmarthome', 'info', ' PRESAVE ╠═══> [' . $this->getName() . ']');
     }
 
 // https://github.com/NextDom/NextDom/wiki/Ajout-d%27un-template-a-votre-plugin	
@@ -606,12 +613,16 @@ class alexasmarthomeCmd extends cmd
 
     public function postSave()
     {
+			//	log::add('alexasmarthome', 'info', ' POSTSAVE_CMD ╠═══> [' . $this->getName() . ']');
 
     }
 
 
     public function preSave()
     {
+				//log::add('alexasmarthome', 'info', ' PRESAVE_CMD  ╠═══> [' . $this->getName() . ']');
+
+		
         if ($this->getLogicalId() == 'refresh') {
             return;
         }
