@@ -201,7 +201,7 @@ class alexasmarthome extends eqLogic
                         //log::add('alexasmarthome', 'info', 'fr:::'.json_encode($capabilityState_array['value']['value']));
                         if ($capabilityState_array['value']['value'] == "OK") $valeuraEnregistrer = 1; else $valeuraEnregistrer = 0;
                     }
-
+                    
                     $cmd = $this->getCmd(null, $capabilityState_array['name']);
                     if (is_object($cmd)) {
                         $this->checkAndUpdateCmd($capabilityState_array['name'], $valeuraEnregistrer);
@@ -237,10 +237,19 @@ class alexasmarthome extends eqLogic
 
 							}
 							if (!($aEteAjoute)) {
-							log::add('alexasmarthome', 'debug', "║!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+							/*log::add('alexasmarthome', 'debug', "║!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 							log::add('alexasmarthome', 'debug', '╠═══> ' . $capabilityState_array['name'] . " n'a pas été ajouté automatiquement, il faut demander à Sigalou de ");
-							log::add('alexasmarthome', 'debug', "║ prévoir cette commande en lui précisant si le résultat attendu est binary/numeric/string ");							
+							log::add('alexasmarthome', 'debug', "║ prévoir cette commande en lui précisant si le résultat attendu est binary ou numeric ou string ");							
 							log::add('alexasmarthome', 'debug', "║!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+								*/
+								self::updateCmd($F, $capabilityState_array['name'], 'info', 'string', false, $capabilityState_array['name'], true, true, null, null, null, null, null, null, 3, true);
+
+								log::add('alexasmarthome', 'info', ' ╠═══> [' . $capabilityState_array['name'] . '] a été ajouté et sera mis à jour la prochaine fois');
+								$aEteAjoute=true;								
+								break;								
+							
+							
+							
 							}
 					}
                 }
@@ -412,7 +421,7 @@ class alexasmarthome extends eqLogic
 
     public function postSave()
     {
-        //log::add('alexasmarthome', 'debug', '**********************postSave '.$this->getName().'***********************************');
+        log::add('alexasmarthome_scan', 'debug', '**********************postSave '.$this->getName().'***********************************');
         $F = $this->getStatus('forceUpdate');// forceUpdate permet de recharger les commandes à valeur d'origine, mais sans supprimer/recréer les commandes
         $capa = $this->getConfiguration('capabilities', '');
         $capaT = $this->getConfiguration('triggers', '');
@@ -468,13 +477,14 @@ class alexasmarthome extends eqLogic
             //self::updateCmd ($F, 'state', 'info', 'binary', false, null, true, true, null, null, null, null, null, null, 1, $cas8);
             //public function updateCmd ($forceUpdate, $LogicalId, $Type, $SubType, $RunWhenRefresh, $Name, $IsVisible, $title_disable, $setDisplayicon, $infoNameArray, $setTemplate_lien, $request, $infoName, $listValue, $Order, $Test) {
 
-
+/* ?! inutile supprimé le 06/02/2021
             $volinfo = $this->getCmd(null, 'volumeinfo');
             $vol = $this->getCmd(null, 'volume');
             if ((is_object($volinfo)) && (is_object($vol))) {
                 $vol->setValue($volinfo->getId());// Lien entre volume et volumeinfo
                 $vol->save();
             }
+			*/
             // Pour la commande Refresh, on garde l'ancienne méthode
             //Commande Refresh
 

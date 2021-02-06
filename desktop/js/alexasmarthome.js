@@ -251,6 +251,8 @@ $("#table_cmd").sortable({
 });
 
 
+
+
 function addCmdToTable(_cmd) {
     if (!isset(_cmd))
         var _cmd = {configuration: {}};
@@ -263,7 +265,7 @@ function addCmdToTable(_cmd) {
     if ((init(_cmd.logicalId) == 'updateallalarms')) {
         return;
     }
-
+  
     if (init(_cmd.type) == 'info') {
         var tr =
             '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">'
@@ -281,7 +283,7 @@ function addCmdToTable(_cmd) {
             + '<td>'
             //     +     '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>'
             + '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info" disabled style="margin-bottom : 5px;" />'
-            //     +     '<span class="subType" subType="' + init(_cmd.subType) + '"></span>'
+            +     '<span class="subType" subType="' + init(_cmd.subType) + '"></span>'
             + '</td>'
             + '<td>'
             //     +     '<small><span class="cmdAttr"  data-l1key="configuration" data-l2key="cmd"></span> Résultat de la commande <span class="cmdAttr"  data-l1key="configuration" data-l2key="taskname"></span> (<span class="cmdAttr"  data-l1key="configuration" data-l2key="taskid"></span>)</small>'
@@ -310,7 +312,12 @@ function addCmdToTable(_cmd) {
 
         $('#table_cmd tbody').append(tr);
         $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
+		if (isset(_cmd.type)) {
+			$('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+		}    
+	jeedom.cmd.changeType($('#table_cmd tbody tr').last(), init(_cmd.subType));
     }
+
 
     if (init(_cmd.type) == 'action') {
         var tr =
