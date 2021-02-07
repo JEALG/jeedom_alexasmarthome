@@ -127,6 +127,14 @@ foreach ($eqLogics as $eqLogic) {
 
                                 }
                             }
+							
+                             if (($eqLogic->getConfiguration('manufacturerName')!= "") && (file_exists(dirname(__FILE__) . '/../../../alexaapi/core/config/devices/'.$eqLogic->getConfiguration('manufacturerName').'.png')))
+                                   echo '<span style="position: absolute; width: 15px; height: 15px;top: 78px; left: 29px; background-image: url(\'plugins/alexaapi/core/config/devices/'.$eqLogic->getConfiguration('manufacturerName').'.png\'); display:block"></span>';
+							 //echo $logoContructeur;
+							 
+                                //echo '<img class="lazy" src="plugins/alexaapi/core/config/devices/' . $logoImg . '.png" style="min-height:75px !important;" />';
+							
+							
                             //$alternateImg = $eqLogic->getConfiguration('type');
                             $logoImg = $eqLogic->getConfiguration('icon');
 //                            $alternateImg = $eqLogic->getConfiguration('type');
