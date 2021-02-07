@@ -129,7 +129,8 @@ foreach ($eqLogics as $eqLogic) {
                             }
                             //$alternateImg = $eqLogic->getConfiguration('type');
                             $logoImg = $eqLogic->getConfiguration('icon');
-                            $alternateImg = $eqLogic->getConfiguration('type');
+//                            $alternateImg = $eqLogic->getConfiguration('type');
+							if ($eqLogic->getConfiguration('typeSmartHome')!='') $alternateImg = $eqLogic->getConfiguration('typeSmartHome'); else $alternateImg = $eqLogic->getConfiguration('type');
                             if (file_exists(dirname(__FILE__) . '/../../../alexaapi/core/config/devices/' . $logoImg . '.png'))
                                 echo '<img class="lazy" src="plugins/alexaapi/core/config/devices/' . $logoImg . '.png" style="min-height:75px !important;" />';
                             elseif (file_exists(dirname(__FILE__) . '/../../../alexaapi/core/config/devices/' . $alternateImg . '.png'))
@@ -291,7 +292,8 @@ foreach ($eqLogics as $eqLogic) {
 
                             //$alternateImg = $eqLogic->getConfiguration('type');
                             $logoImg = $eqLogic->getConfiguration('icon');
-                            $alternateImg = $eqLogic->getConfiguration('type');
+							if ($eqLogic->getConfiguration('typeSmartHome')!='') $alternateImg = $eqLogic->getConfiguration('typeSmartHome'); else $alternateImg = $eqLogic->getConfiguration('type');
+                            //$alternateImg = $eqLogic->getConfiguration('type');
                             if (file_exists(dirname(__FILE__) . '/../../../alexaapi/core/config/devices/' . $logoImg . '.png'))
                                 echo '<img class="lazy" src="plugins/alexaapi/core/config/devices/' . $logoImg . '.png" style="min-height:75px !important;" />';
                             elseif (file_exists(dirname(__FILE__) . '/../../../alexaapi/core/config/devices/' . $alternateImg . '.png'))
@@ -448,42 +450,71 @@ foreach ($eqLogics as $eqLogic) {
                         <form class="form-horizontal">
                             <fieldset>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{entityID}}</label>
+                                    <label class="col-sm-2 control-label">{{ID Alexa}}</label>
                                     <div class="col-sm-8">
                                         <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
                                               data-l1key="logicalId"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{applianceID}}</label>
+                                    <label class="col-sm-2 control-label">{{ID smartHome}}</label>
                                     <div class="col-sm-8">
                                         <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
                                               data-l1key="configuration" data-l2key="applianceId"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{Type}}</label>
+                                    <label class="col-sm-2 control-label">{{Connecté via}}</label>
+                                    <div class="col-sm-8">
+                                        <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
+                                              data-l1key="configuration" data-l2key="manufacturerName"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">{{Description}}</label>
+                                    <div class="col-sm-8">
+                                        <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
+                                              data-l1key="configuration" data-l2key="friendlyDescription"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">{{Type Alexa}}</label>
                                     <div class="col-sm-8">
                                         <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
                                               data-l1key="configuration" data-l2key="type"></span>
                                     </div>
                                 </div>
                                 <div class="form-group" id="family">
-                                    <label class="col-sm-2 control-label">{{Famille}}</label>
+                                    <label class="col-sm-2 control-label">{{Famille Alexa}}</label>
                                     <div class="col-sm-8">
                                         <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
                                               data-l1key="configuration" data-l2key="family"></span>
                                     </div>
-                                </div>                <!-- Onglet "Image" -->
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{Fonctionnalités}}</label>
+                                </div>                
+                                <div class="form-group" >
+                                    <label class="col-sm-2 control-label">{{Type smartHome}}</label>
+                                    <div class="col-sm-8">
+                                        <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
+                                              data-l1key="configuration" data-l2key="typeSmartHome"></span>
+                                    </div>
+                                </div>                                  
+								<div class="form-group">
+                                    <label class="col-sm-2 control-label">{{Fonctionnalités Alexa}}</label>
                                     <div class="col-sm-8">
                                         <span style="position:relative;top:+5px;left:+5px;font-size: 10px;"
                                               class="eqLogicAttr" data-l1key="configuration"
                                               data-l2key="capabilities"></span>
                                     </div>
                                 </div>
-                                <div class="form-group">
+								<div class="form-group">
+                                    <label class="col-sm-2 control-label">{{Fonctionnalités smartHome}}</label>
+                                    <div class="col-sm-8">
+                                        <span  style="position:relative;top:+5px;left:+5px;font-size: 10px;"
+										class="eqLogicAttr" data-l1key="configuration"
+                                              data-l2key="capabilitiesSmartHome"></span>
+                                    </div>
+                                </div>                                
+								<div class="form-group">
                                     <label class="col-sm-2 control-label">{{Triggers}}</label>
                                     <div class="col-sm-8">
                                         <span style="position:relative;top:+5px;left:+5px;font-size: 10px;"

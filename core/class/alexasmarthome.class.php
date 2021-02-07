@@ -432,11 +432,12 @@ class alexasmarthome extends eqLogic
 
        // log::add('alexasmarthome_scan', 'debug', '**********************postSave '.$this->getName().'***********************************');
         $F = $this->getStatus('forceUpdate');// forceUpdate permet de recharger les commandes à valeur d'origine, mais sans supprimer/recréer les commandes
-        $capa = $this->getConfiguration('capabilities', '');
-        $capaT = $this->getConfiguration('triggers', '');
+        $capa = $this->getConfiguration('capabilities');
+        $capaSH = $this->getConfiguration('capabilitiesSmartHome');
+        $capaT = $this->getConfiguration('triggers');
         // il faudra ajouter supportedTriggers	, ex : contactSensorDetectionStateTrigger pour les contacts
         $type = $this->getConfiguration('type', '');
-        if ((!empty($capa)) || (!empty($capaT))) {
+        if ((!empty($capa)) || (!empty($capaT)) || (!empty($capaSH))) {
 
             if (strstr($this->getName(), "Alexa Apps")) {
                 self::updateCmd($F, 'push', 'action', 'message', false, 'Push', true, true, 'fa jeedomapp-audiospeak', null, null, 'push?text=#message#', null, null, 1, true);
@@ -661,7 +662,9 @@ class alexasmarthomeCmd extends cmd
 
         $request = $this->buildRequest($_options);
         //$request="http://192.168.0.21:3456/volume?value=50&device=G090LF118173117U";
-        log::add('alexasmarthome', 'debug', 'Request : ' . $request);//Request : http://192.168.0.21:3456/volume?value=50&device=G090LF118173117U
+        //log::add('alexasmarthome', 'debug', 'Request : ' . $request);//Request : http://192.168.0.21:3456/volume?value=50&device=G090LF118173117U
+		log::add('alexasmarthome', 'info', ' ║ ════envoi══> ' . $request);
+
         $request_http = new com_http($request);
         $request_http->setAllowEmptyReponse(true);//Autorise les réponses vides
         if ($this->getConfiguration('noSslCheck') == 1) $request_http->setNoSslCheck(true);
@@ -675,6 +678,7 @@ class alexasmarthomeCmd extends cmd
         if (!$result) throw new Exception(__('Serveur injoignable', __FILE__));
         // On traite la valeur de resultat (dans le cas de whennextalarm par exemple)
         $resultjson = json_decode($result, true);
+        log::add('alexasmarthome', 'debug', '║ <══réponse═  ' . json_encode($resultjson));
 
 
         // Ici, on va traiter une commande qui n'a pas été executée correctement (erreur type "Connexion Close")
@@ -698,6 +702,30 @@ class alexasmarthomeCmd extends cmd
             $value = $resultjson['value'];
         }
 
+		// On va décortiquer la réponse pour récupérer les variables à mettre à jour
+		//[{"device":"5bf3655b-f8cb-4696-93a0-bbf4b2d42314","command":"turnOff","powerState":"0"}]
+		$lesResultats=$resultjson[0];
+		unset($lesResultats['device']);
+		unset($lesResultats['command']);
+            foreach ($lesResultats as $key => $value) {
+                    //log::add('alexasmarthome', 'debug', '║ trouvé ' . $key."=".$value );
+					
+				$cmd = $this->getEqLogic()->getCmd(null, $key);
+                if (is_object($cmd)) {
+                    $this->getEqLogic()->checkAndUpdateCmd($key, $value);
+                    log::add('alexasmarthome', 'debug', '║ Mise à jour de '.$key . ' sur ' . $this->getName() . '. Valeur: ' . $value);
+
+                } else {
+					$this->getEqLogic()->updateCmd($F, $key, 'info', 'string', false, $key, true, true, null, null, null, null, null, null, 3, true);
+					log::add('alexasmarthome', 'info', ' ╠═══> [' . $key . '] a été détecté dans la réponse du serveur, il a été ajouté. Vérifier son type (Numerique, Binaire ou autre) ');
+                }
+					
+			}
+
+
+
+
+
 
         if (($this->getType() == 'action') && (is_array($this->getConfiguration('infoNameArray')))) {
             foreach ($this->getConfiguration('infoNameArray') as $LogicalIdCmd) {
@@ -706,7 +734,7 @@ class alexasmarthomeCmd extends cmd
                     $this->getEqLogic()->checkAndUpdateCmd($LogicalIdCmd, $resultjson[0][$LogicalIdCmd]);
                     //log::add('alexasmarthome', 'info', $LogicalIdCmd.' prévu dans infoNameArray de '.$this->getName().' trouvé ! '.$resultjson[0]['whennextmusicalalarminfo'].' OK !');
                 } else {
-                    log::add('alexasmarthome', 'warning', $LogicalIdCmd . ' prévu dans infoNameArray de ' . $this->getName() . ' mais non trouvé ! donc ignoré');
+                    log::add('alexasmarthome', 'warning', '║ '.$LogicalIdCmd . ' prévu dans infoNameArray de ' . $this->getName() . ' mais non trouvé ! donc ignoré');
                 }
             }
         } elseif (($this->getType() == 'action') && ($this->getConfiguration('infoName') != '')) {
@@ -719,13 +747,15 @@ class alexasmarthomeCmd extends cmd
                 $cmd = $this->getEqLogic()->getCmd(null, $LogicalIdCmd);
                 if (is_object($cmd)) {
                     $this->getEqLogic()->checkAndUpdateCmd($LogicalIdCmd, $resultjson[0][$LogicalIdCmd]);
-                    log::add('alexasmarthome', 'debug', $LogicalIdCmd . ' prévu dans infoName de ' . $this->getName() . ' et trouvé ! Valeur: ' . $resultjson[0][$LogicalIdCmd]);
+                    log::add('alexasmarthome', 'debug', '║ '.$LogicalIdCmd . ' prévu dans infoName de ' . $this->getName() . ' et trouvé ! Valeur: ' . $resultjson[0][$LogicalIdCmd]);
+
                 } else {
-                    log::add('alexasmarthome', 'warning', $LogicalIdCmd . ' prévu dans infoName de ' . $this->getName() . ' mais non trouvé ! donc ignoré');
+                    log::add('alexasmarthome', 'warning', '║ '.$LogicalIdCmd . ' prévu dans infoName de ' . $this->getName() . ' mais non trouvé ! donc ignoré');
                 }
             }
         }
-        return true;
+       log::add('alexasmarthome', 'info', ' ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════');
+       return true;
     }
 
 
@@ -733,7 +763,10 @@ class alexasmarthomeCmd extends cmd
     {
         if ($this->getType() != 'action') return $this->getConfiguration('request');
         list($command, $arguments) = explode('?', $this->getConfiguration('request'), 2);
-        log::add('alexasmarthome', 'info', '----Command:*' . $command . '* Request:' . json_encode($_options));
+        //log::add('alexasmarthome', 'info', '----Command:*' . $command . '* Request:' . );
+        log::add('alexasmarthome', 'info', ' ╔══════════════════════[Lancement de la commande ' . $command . ']══════Request : '.json_encode($_options));
+        //log::add('alexasmarthome', 'info', 'Refresh du device : '.$this->getName().' ('.$family.')');
+
         switch ($command) {
             case 'SmarthomeCommand':
                 $request = $this->build_ControledeSliderSelectMessage($_options, '2960');
@@ -756,7 +789,7 @@ class alexasmarthomeCmd extends cmd
             $lastvolume=$cmd->execCmd();
         */
         $request = $this->getConfiguration('request');
-        log::add('alexasmarthome', 'info', '---->Request2:' . $request . '---->_options:' . json_encode($_options));
+        //log::add('alexasmarthome', 'info', '---->Request2:' . $request . '---->_options:' . json_encode($_options));
         //log::add('alexasmarthome_node', 'debug', '---->getName:'.$this->getEqLogic()->getCmd(null, 'volumeinfo')->execCmd());
         if ((isset($_options['slider'])) && ($_options['slider'] == "")) $_options['slider'] = $default;
         if ((isset($_options['select'])) && ($_options['select'] == "")) $_options['select'] = $default;
@@ -772,7 +805,7 @@ class alexasmarthomeCmd extends cmd
         if (isset($_options['volume'])) $_options_volume = $_options['volume']; else $_options_volume = "";
         $request = str_replace(array('#slider#', '#select#', '#message#', '#volume#', '#color#'),
             array($_options_slider, $_options_select, urlencode(self::decodeTexteAleatoire($_options_message)), $_options_volume, $_options_color), $request);
-        log::add('alexasmarthome', 'info', '---->RequestFinale:' . $request);
+        //log::add('alexasmarthome', 'info', '---->RequestFinale:' . $request);
         return $request;
     }
 
