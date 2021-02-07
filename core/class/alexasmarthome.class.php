@@ -202,7 +202,14 @@ class alexasmarthome extends eqLogic
                         if ($capabilityState_array['value']['value'] == "OK") $valeuraEnregistrer = 1; else $valeuraEnregistrer = 0;
                     }
                     
-
+                    if ($capabilityState_array['name'] == "detectionState") {
+                        //https://developer.amazon.com/fr-FR/docs/alexa/device-apis/alexa-contactsensor.html
+                        //DETECTED 	The sensor is open and the two pieces of the sensor are not in contact with each other. For example, after a window has been opened.
+                        //NOT_DETECTED 	The sensor is closed and the two pieces of the sensor are in contact with each other.
+                        //log::add('alexasmarthome', 'info', 'value:::'.json_encode($capabilityState_array['value']));
+                        //log::add('alexasmarthome', 'info', 'fr:::'.json_encode($capabilityState_array['value']['value']));
+                        //if ($capabilityState_array['value']['value'] == "DETECTED") $valeuraEnregistrer = 1; else $valeuraEnregistrer = 0;
+                    }
 
 
 
@@ -366,7 +373,35 @@ class alexasmarthome extends eqLogic
             }
         }
     }
-
+	
+    public static function metAjourFabriquantsDesactives()
+    {
+        //log::add('alexasmarthome', 'debug', "metAjourFabriquantsDesactives");
+        $eqLogics = eqLogic::byType('alexasmarthome', false); // false pour prendre en compte les désactivés, important !
+		$FabriquantsaAactiver = array();
+		foreach ($eqLogics as $eqLogic) {
+        //log::add('alexasmarthome', 'debug', $eqLogic->getConfiguration('manufacturerName'));
+        //log::add('alexasmarthome', 'debug', "fabriquant_".str_replace(" ", "_", $eqLogic->getConfiguration('manufacturerName')));
+        //log::add('alexasmarthome', 'debug', config::byKey("fabriquant_".str_replace(" ", "_", $eqLogic->getConfiguration('manufacturerName')), 'alexasmarthome', '0')."-".$eqLogic->getConfiguration('manufacturerName'));
+			if (config::byKey("fabriquant_".str_replace(" ", "_", $eqLogic->getConfiguration('manufacturerName')), 'alexasmarthome', '0'))	
+				array_push($FabriquantsaAactiver, $eqLogic->getConfiguration('manufacturerName'));
+		}
+		$FabriquantsaAactiver = array_unique($FabriquantsaAactiver);
+        //log::add('alexasmarthome', 'debug', json_encode($FabriquantsaAactiver));
+        foreach ($eqLogics as $alexasmarthome) {
+			if (($alexasmarthome->getIsEnable() == 1) && (!(in_array($alexasmarthome->getConfiguration('manufacturerName'), $FabriquantsaAactiver)))) {
+				//log::add('alexasmarthome', 'info', 'Il faut désactiver '.$alexasmarthome->getName().' qui est dans '.$alexasmarthome->getConfiguration('manufacturerName'));
+				$alexasmarthome->setIsEnable(0);
+				$alexasmarthome->save(true);
+			}
+			if (($alexasmarthome->getIsEnable() == 0) && (in_array($alexasmarthome->getConfiguration('manufacturerName'), $FabriquantsaAactiver))) {
+				//log::add('alexasmarthome', 'info', 'Il faut activer '.$alexasmarthome->getName().' qui est dans '.$alexasmarthome->getConfiguration('manufacturerName'));
+				$alexasmarthome->setIsEnable(1);
+				$alexasmarthome->save(true);			
+			}
+		}
+    }
+	
     public function updateCmd($forceUpdate, $LogicalId, $Type, $SubType, $RunWhenRefresh, $Name, $IsVisible, $title_disable, $setDisplayicon, $infoNameArray, $setTemplate_lien, $request, $infoName, $listValue, $Order, $Test)
     {
 		
@@ -457,7 +492,7 @@ class alexasmarthome extends eqLogic
             $cas3 = (($this->hasCapaorFamilyorType("contactSensorDetectionStateTrigger")) && $widgetSmarthome);
             $false = false;
             // CONTACT_SENSOR
-            self::updateCmd($F, 'detectionState', 'info', 'string', false, "Etat Détection", true, true, null, null, null, null, null, null, 1, $cas3);// "DETECTED","NOT_DETECTED"
+            //self::updateCmd($F, 'detectionState', 'info', 'string', false, "Etat Détection", true, true, null, null, null, null, null, null, 1, $cas3);// "DETECTED","NOT_DETECTED" supprimé le 07/02/21 détecté tout seul
 
 			// !!!!!!!!!!!!!! ON AJOUTE LES COMMANDES INFO DANS REFRESH MAINTENANT 	
             //self::updateCmd($F, 'test5', 'action', 'other', false, 'Test5', true, true, 'fas fa-circle" style="color:yellow', null, null, 'SmarthomeCommand?command=SetMode&mode=Position.Up', "refresh", null, 10, $cas9);   

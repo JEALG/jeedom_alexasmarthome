@@ -118,15 +118,19 @@ foreach ($eqLogics as $eqLogic) {
                             $opacity = ($eqLogic->getIsEnable()) ? '' : ' disableCard';
                             echo '<div class="eqLogicDisplayCard cursor third ' . $opacity . '" data-eqLogic_id="' . $eqLogic->getId() . '">';
 
-                            if (($eqLogic->getStatus('online') != 'true') && (!strstr($eqLogic->getName(), "Alexa Apps")) && (!strstr($eqLogic->getName(), "Ultimate Alexa"))) {
+
+
+
+					// Bouton OFF à revoir !!!
+                    //        if (($eqLogic->getStatus('online') != 'true') && (!strstr($eqLogic->getName(), "Alexa Apps")) && (!strstr($eqLogic->getName(), "Ultimate Alexa"))) {
                                 //echo '<i class="fas fa-power-off" style="color: red;text-shadow: 4px 4px 4px #ccc;float:right" title="Offline"></i>';
-                                echo '<span class="badge badge-danger">Off</span>';
-                            } else {
+                    //            echo '<span class="badge badge-danger">Off</span>';
+                    //        } else {
                                 if ($interval->format('%a') < 1) {
                                     echo '<span class="badge badge-success">Nouveau</span>';
 
                                 }
-                            }
+                    //        }
 							
                              if (($eqLogic->getConfiguration('manufacturerName')!= "") && (file_exists(dirname(__FILE__) . '/../../../alexaapi/core/config/devices/'.$eqLogic->getConfiguration('manufacturerName').'.png')))
                                    echo '<span style="position: absolute; width: 15px; height: 15px;top: 78px; left: 29px; background-image: url(\'plugins/alexaapi/core/config/devices/'.$eqLogic->getConfiguration('manufacturerName').'.png\'); display:block"></span>';
@@ -457,56 +461,56 @@ foreach ($eqLogics as $eqLogic) {
                         <form class="form-horizontal">
                             <fieldset>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{ID Alexa}}</label>
+                                    <label style="font-size: 10px;" class="col-sm-2 control-label">{{ID Alexa}}</label>
                                     <div class="col-sm-8">
-                                        <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
+                                        <span style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="eqLogicAttr"
                                               data-l1key="logicalId"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{ID smartHome}}</label>
+                                    <label style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="col-sm-2 control-label">{{ID smartHome}}</label>
                                     <div class="col-sm-8">
-                                        <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
+                                        <span style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="eqLogicAttr"
                                               data-l1key="configuration" data-l2key="applianceId"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{Connecté via}}</label>
+                                    <label style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="col-sm-2 control-label">{{Connecté via}}</label>
                                     <div class="col-sm-8">
-                                        <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
+                                        <span style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="eqLogicAttr"
                                               data-l1key="configuration" data-l2key="manufacturerName"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{Description}}</label>
+                                    <label style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="col-sm-2 control-label">{{Description}}</label>
                                     <div class="col-sm-8">
-                                        <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
+                                        <span style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="eqLogicAttr"
                                               data-l1key="configuration" data-l2key="friendlyDescription"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{Type Alexa}}</label>
+                                    <label style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="col-sm-2 control-label">{{Type Alexa}}</label>
                                     <div class="col-sm-8">
-                                        <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
+                                        <span style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="eqLogicAttr"
                                               data-l1key="configuration" data-l2key="type"></span>
                                     </div>
                                 </div>
                                 <div class="form-group" id="family">
-                                    <label class="col-sm-2 control-label">{{Famille Alexa}}</label>
+                                    <label style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="col-sm-2 control-label">{{Famille Alexa}}</label>
                                     <div class="col-sm-8">
-                                        <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
+                                        <span style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="eqLogicAttr"
                                               data-l1key="configuration" data-l2key="family"></span>
                                     </div>
                                 </div>                
                                 <div class="form-group" >
-                                    <label class="col-sm-2 control-label">{{Type smartHome}}</label>
+                                    <label style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="col-sm-2 control-label">{{Type smartHome}}</label>
                                     <div class="col-sm-8">
-                                        <span style="position:relative;top:+5px;left:+5px;" class="eqLogicAttr"
+                                        <span style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="eqLogicAttr"
                                               data-l1key="configuration" data-l2key="typeSmartHome"></span>
                                     </div>
                                 </div>                                  
 								<div class="form-group">
-                                    <label class="col-sm-2 control-label">{{Fonctionnalités Alexa}}</label>
+                                    <label style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="col-sm-2 control-label">{{Fonctionnalités Alexa}}</label>
                                     <div class="col-sm-8">
                                         <span style="position:relative;top:+5px;left:+5px;font-size: 10px;"
                                               class="eqLogicAttr" data-l1key="configuration"
@@ -514,7 +518,7 @@ foreach ($eqLogics as $eqLogic) {
                                     </div>
                                 </div>
 								<div class="form-group">
-                                    <label class="col-sm-2 control-label">{{Fonctionnalités smartHome}}</label>
+                                    <label style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="col-sm-2 control-label">{{Fonctionnalités smartHome}}</label>
                                     <div class="col-sm-8">
                                         <span  style="position:relative;top:+5px;left:+5px;font-size: 10px;"
 										class="eqLogicAttr" data-l1key="configuration"
@@ -522,7 +526,7 @@ foreach ($eqLogics as $eqLogic) {
                                     </div>
                                 </div>                                
 								<div class="form-group">
-                                    <label class="col-sm-2 control-label">{{Triggers}}</label>
+                                    <label style="position:relative;top:+5px;left:+5px;font-size: 10px;" class="col-sm-2 control-label">{{Triggers}}</label>
                                     <div class="col-sm-8">
                                         <span style="position:relative;top:+5px;left:+5px;font-size: 10px;"
                                               class="eqLogicAttr" data-l1key="configuration"

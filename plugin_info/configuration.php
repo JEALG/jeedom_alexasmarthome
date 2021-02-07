@@ -4,7 +4,22 @@ if (!isConnect()) {
     die();
 }
 
+require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
+include_file('core', 'authentification', 'php');
+include_file('desktop', 'alexaapi', 'js', 'alexaapi');
+
+// Obtenir l'identifiant du plugin
+$plugin = plugin::byId('alexasmarthome');
+// Accéder aux données du plugin
+$eqLogics = eqLogic::byType($plugin->getId());
+
+$tousLesFabriquants = array();
+foreach ($eqLogics as $eqLogic) {
+	array_push($tousLesFabriquants, $eqLogic->getConfiguration('manufacturerName'));
+}
+$tousLesFabriquants = array_unique($tousLesFabriquants);
+ 
 ?>
 <form class="form-horizontal">
     <fieldset>
@@ -16,10 +31,62 @@ if (!isConnect()) {
                     {{Lancer}}</a>
             </div>
         </div>
-    </fieldset>
+		
+    </fieldset>		
+		<fieldset>
+        <legend><i class="far fa-check-square"></i> {{Activer/Désactiver les équipements smartHome de certains fabriquants}}</legend>
+        <div class="form-group">
+ <?php
+	foreach ($tousLesFabriquants as $Fabriquant) {
+		$FabriquantID=str_replace(" ", "_", $Fabriquant);
+		?><div>
+            <label class="col-lg-4 col-md-3 col-sm-4 col-xs-6 control-label"></label>
+		<input type="checkbox" class="configKey" data-l1key="fabriquant_<?php echo $FabriquantID?>"/>
+		<label for="coding"><?php echo $Fabriquant;?></label>
+		</div><?php
+	}
+?>     
+            <label class="col-lg-4 col-md-3 col-sm-4 col-xs-6 control-label"></label>
+            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                <a class="btn btn-success bt_desactiverFabriquants"><i class="far fa-check-square"></i>
+                    {{Activer uniquement les fabriquants cochés}}</a>
+            </div>
+
+
+        </div>
+</fieldset>
+		
+		
+		
+		
+		
+
 </form>
 
 <script>
+    $('.bt_desactiverFabriquants').off('click').on('click', function () {
+		//savePluginConfig( {"success":function(){window.location.reload()}})
+	savePluginConfig( {"success":function(){
+		
+		$.ajax({
+			type: "POST",
+			url: "plugins/alexasmarthome/core/ajax/alexasmarthome.ajax.php",
+			data: {
+			  action: "metAjourFabriquantsDesactives",
+			},
+			dataType: 'json',
+			error: function (request, status, error) {
+			  handleAjaxError(request, status, error);
+			},
+			success: function (data) {
+
+			  window.location.reload();
+			}
+		  });
+		
+	}})	
+	
+  });
 
     $('.bt_supprimeTouslesDevicesSmartHome').off('click').on('click', function () {
         $('#md_modal').dialog('close');
