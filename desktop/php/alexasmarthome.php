@@ -532,7 +532,7 @@ foreach ($eqLogics as $eqLogic) {
                                               class="eqLogicAttr" data-l1key="configuration"
                                               data-l2key="triggers"></span>
                                     </div>
-                                </div>
+                                </div><!--
                                 <div class="form-group">
                                     <div class="col-sm-10">
                                         <center>
@@ -541,7 +541,7 @@ foreach ($eqLogics as $eqLogic) {
                                                  onerror="this.src='plugins/alexaapi/core/config/devices/default.png'"/>
                                         </center>
                                     </div>
-                                </div>
+                                </div>-->
                             </fieldset>
                         </form>
                     </div>

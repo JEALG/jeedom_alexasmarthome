@@ -376,17 +376,26 @@ class alexasmarthome extends eqLogic
 	
     public static function metAjourFabriquantsDesactives()
     {
-        //log::add('alexasmarthome', 'debug', "metAjourFabriquantsDesactives");
+		//DELETE  FROM config where plugin='alexasmarthome' and `key` like 'fabriquant_%';
+        //log::add('alexasmarthome', 'debug', "Lance function metAjourFabriquantsDesactives");
         $eqLogics = eqLogic::byType('alexasmarthome', false); // false pour prendre en compte les désactivés, important !
 		$FabriquantsaAactiver = array();
+		// On fait une première boucle pour voir si les cases à cocher sur le choix des Fabriquants à activer ont déja été utilisées
+		$aucuneInfoConfig=true;
+		foreach ($eqLogics as $eqLogic) {
+		if (config::byKey("fabriquant_".str_replace(" ", "_", $eqLogic->getConfiguration('manufacturerName')), 'alexasmarthome', 'non')!='non') $aucuneInfoConfig=false;
+		}//si $aucuneInfoConfig=true c'est que les cases de la config ne sont pas cochées
 		foreach ($eqLogics as $eqLogic) {
         //log::add('alexasmarthome', 'debug', $eqLogic->getConfiguration('manufacturerName'));
         //log::add('alexasmarthome', 'debug', "fabriquant_".str_replace(" ", "_", $eqLogic->getConfiguration('manufacturerName')));
         //log::add('alexasmarthome', 'debug', config::byKey("fabriquant_".str_replace(" ", "_", $eqLogic->getConfiguration('manufacturerName')), 'alexasmarthome', '0')."-".$eqLogic->getConfiguration('manufacturerName'));
 			if (config::byKey("fabriquant_".str_replace(" ", "_", $eqLogic->getConfiguration('manufacturerName')), 'alexasmarthome', '0'))	
 				array_push($FabriquantsaAactiver, $eqLogic->getConfiguration('manufacturerName'));
+			if ($aucuneInfoConfig)	
+				array_push($FabriquantsaAactiver, $eqLogic->getConfiguration('manufacturerName'));
 		}
 		$FabriquantsaAactiver = array_unique($FabriquantsaAactiver);
+		if ($aucuneInfoConfig)	$FabriquantsaAactiver = array_diff($FabriquantsaAactiver, ['Jeedom']);
         //log::add('alexasmarthome', 'debug', json_encode($FabriquantsaAactiver));
         foreach ($eqLogics as $alexasmarthome) {
 			if (($alexasmarthome->getIsEnable() == 1) && (!(in_array($alexasmarthome->getConfiguration('manufacturerName'), $FabriquantsaAactiver)))) {
@@ -399,6 +408,7 @@ class alexasmarthome extends eqLogic
 				$alexasmarthome->setIsEnable(1);
 				$alexasmarthome->save(true);			
 			}
+		if ($aucuneInfoConfig) config::save("fabriquant_".str_replace(" ", "_", $alexasmarthome->getConfiguration('manufacturerName')), $alexasmarthome->getIsEnable(), "alexasmarthome");
 		}
     }
 	
